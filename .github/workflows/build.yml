@@ -1,0 +1,30 @@
+name: Build ADFSDump
+
+on:
+  push:
+    branches: [master, "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build (Release)
+        run: msbuild ADFSDump.sln /p:Configuration=Release /p:Platform="Any CPU" /v:minimal
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ADFSDump
+          path: |
+            ADFSDump/bin/Release/ADFSDump.exe
+            ADFSDump/bin/Release/ADFSDump.exe.config
+          if-no-files-found: error
