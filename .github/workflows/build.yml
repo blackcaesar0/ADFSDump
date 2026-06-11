@@ -17,6 +17,9 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Install .NET Framework 4.5.2 targeting pack
+        run: choco install netfx-4.5.2-devpack -y --no-progress
+
       - name: Build (Release)
         run: msbuild ADFSDump.sln /p:Configuration=Release /p:Platform="Any CPU" /v:minimal
 
