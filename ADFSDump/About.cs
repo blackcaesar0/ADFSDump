@@ -32,11 +32,15 @@ By default ADFSDump will do three things:
 Arguments:
     /domain: The FQDN of the domain, defaults to the current domain
     /server: The FQDN of the domain controller to connect to, defaults to current
+    /username: (optional) Username to bind to AD as. Requires /password
+    /password: (optional) Password for /username
     /nokey: (optional) Flag. Disable fetching of DKM key from AD
     /database: (optional) SQL connection string if ADFS is using remote MS SQL rather than WID
+    /json: (optional) Flag. Emit a single JSON document on STDOUT (progress goes to STDERR)
+    /help: (optional) Flag. Show this help. Aliases: -h, --help, /?
 
 Requirements:
-    Supports AD FS 2012 and 2016
+    Supports AD FS 2012 R2, 2016, 2019 and 2022
     Must be run locally on an AD FS server. Preferably the primary
     Assumes that AD FS is configured to use WID rather than a dedicated SQL server
     Must be run using the AD FS service account

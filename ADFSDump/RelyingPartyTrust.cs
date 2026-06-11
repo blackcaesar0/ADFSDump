@@ -14,21 +14,22 @@ namespace ADFSDump.RelyingPartyTrust
 
     public class RelyingParty
     {
-        private Dictionary<int, string> SamlResponseSignatureTypes = new Dictionary<int, string>()
+        private static readonly Dictionary<int, string> SamlResponseSignatureTypes = new Dictionary<int, string>()
         {
-            {
-                0, "None"
-            },
-            {
-                1, "Assertion"
-            },
-            {
-                2, "Message"
-            },
-            {
-                3, "Both"
-            }
+            { 0, "None" },
+            { 1, "Assertion" },
+            { 2, "Message" },
+            { 3, "Both" }
         };
+
+        public string SamlResponseSignatureTypeName
+        {
+            get
+            {
+                string name;
+                return SamlResponseSignatureTypes.TryGetValue(SamlResponseSignatureType, out name) ? name : "Unknown";
+            }
+        }
 
         public string Id
         { get; set; }
@@ -105,7 +106,7 @@ namespace ADFSDump.RelyingPartyTrust
     Sign-In Protocol: {GetSignInProtocol()}
     Sign-In Endpoint: {FederationEndpoint}
     Signature Algorithm: {SignatureAlgorithm}
-    SamlResponseSignatureType: {SamlResponseSignatureType};
+    SamlResponseSignatureType: {SamlResponseSignatureTypeName};
     Identifier: {Identity}
     Access Policy: {AccessPolicy}
     Access Policy Parameter: {AccessPolicyParam}
