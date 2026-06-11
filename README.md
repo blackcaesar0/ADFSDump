@@ -31,15 +31,23 @@ ADFSDump is a tool that will read information from Active Directory and from the
 * `/database`:  (optional) SQL connection string if ADFS is using remote MS SQL rather than WID. Wrap in quotes, i.e. "/database:Data Source=sql.domain.com;Initial Catalog=AdfsConfigurationV4;Integrated Security=True"
 * `/username`: (optional) Username to run the tool as. If set, must have a password passed with it.
 * `/password`: (optional) Password for the user account to run the tool as.
+* `/json`: (optional) Switch. Emit a single JSON document on STDOUT (all progress/diagnostic text is written to STDERR), making the output easy to feed into ADFSpoof or other tooling.
+* `/help`: (optional) Switch. Show usage. Aliases: `-h`, `--help`, `/?`.
 
 ## Compilation Instructions
 
 A compiled version will not be released. You'll have to compile it yourself!
 
- ADFSDump was built against .NET 4.5 with Visual Studio 2017 Community Edition. Simply open up the project .sln, choose "Release", and build.
+The project is an SDK-style project targeting the .NET Framework 4.5.2 runtime (the same runtime AD FS requires). Because it uses the `Microsoft.NETFramework.ReferenceAssemblies` package, it can be compiled on **any** operating system with the .NET SDK installed — no Windows or Visual Studio required:
 
-### Targeting Other .NET Versions
+```
+dotnet build ADFSDump.sln -c Release
+```
 
-ADFSDump's default build configuration is for .NET 4.5, which will fail on systems without that version installed. To target ADFSDump for .NET 4 or 3.5, open the .sln solution, go to Project -> ADFSDump Properties and change the "Target framework" to another version.
+The resulting `ADFSDump.exe` (and `ADFSDump.exe.config`) is written to `ADFSDump/bin/Release/net452/`. It is a portable AnyCPU assembly that runs on any Windows host with .NET Framework 4.5.2 or later installed, including AD FS servers.
 
-Note that AD FS requires .NET framework 4.5, so I'm not sure why you need to use a different version anyway :wink:
+You can still open `ADFSDump.sln` in Visual Studio and build "Release" if you prefer.
+
+### Continuous builds
+
+A GitHub Actions workflow (`.github/workflows/build.yml`) builds the tool on a Windows runner and publishes `ADFSDump.exe` as a downloadable artifact on every push and pull request.

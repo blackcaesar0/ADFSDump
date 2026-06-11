@@ -14,20 +14,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Install .NET Framework 4.5.2 targeting pack
-        run: choco install netfx-4.5.2-devpack -y --no-progress
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
 
       - name: Build (Release)
-        run: msbuild ADFSDump.sln /p:Configuration=Release /p:Platform="Any CPU" /v:minimal
+        run: dotnet build ADFSDump.sln -c Release
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ADFSDump
           path: |
-            ADFSDump/bin/Release/ADFSDump.exe
-            ADFSDump/bin/Release/ADFSDump.exe.config
+            ADFSDump/bin/Release/net452/ADFSDump.exe
+            ADFSDump/bin/Release/net452/ADFSDump.exe.config
           if-no-files-found: error
