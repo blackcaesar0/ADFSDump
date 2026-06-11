@@ -26,9 +26,24 @@ namespace ADFSDump.ActiveDirectory
             }
 
             // Domain, server and credentials are independent of one another.
-            string domain = arguments.ContainsKey("/domain")
-                ? arguments["/domain"]
-                : System.DirectoryServices.ActiveDirectory.Domain.GetCurrentDomain().Name;
+            string domain;
+            if (arguments.ContainsKey("/domain"))
+            {
+                domain = arguments["/domain"];
+            }
+            else
+            {
+                try
+                {
+                    domain = System.DirectoryServices.ActiveDirectory.Domain.GetCurrentDomain().Name;
+                }
+                catch (Exception e)
+                {
+                    Log.Status("!!! Could not determine the current domain automatically: {0}", e.Message);
+                    Log.Status("!!! Specify the domain explicitly with /domain:<fqdn>");
+                    return keys;
+                }
+            }
             string searchString = arguments.ContainsKey("/server")
                 ? string.Format("LDAP://{0}/", arguments["/server"])
                 : "LDAP://";
